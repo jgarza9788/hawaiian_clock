@@ -1,0 +1,277 @@
+:root {
+
+	--circle-x: 0%;
+	--circle-y: 100%;
+
+	--lines: #888;
+	/* color between the lines (was white) */
+	/* --gap: #1a1b26; */
+	--gap: #4b1460;
+	--number-opacity: 0.47;
+
+	--blur-amount: 0.0125;
+
+	/* ring spacing multiplier: <1 = denser, >1 = sparser (animated in script.js) */
+	--ring-scale: 1.0;
+}
+
+* {
+	transition: all 0.1s ease;
+}
+
+html {
+	font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif;
+
+	/* font-family: 'Fira Code', monospace; */
+}
+
+html,
+body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+::selection {
+	background: #000;
+	color: hsl(0deg, 0%, 52%);
+}
+
+.space{
+	height: 0.25em;
+}
+
+.clock {
+	font-size: 35vh;
+	line-height: 0.8;
+	position: static;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	font-style: italic;
+	font-weight: 1000;
+	letter-spacing: -0.05em;
+	font-variant-numeric: tabular-nums;
+	overflow: hidden;
+}
+
+.clock-inner {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: grid;
+	place-content: center;
+	/* place-content: left; */
+
+	/* place-content: end space-between; */
+	align-content: center;
+	/* justify-content: flex-end; */
+
+	/*
+	background: repeating-radial-gradient(
+		circle at 0% 100%,
+		#000,
+		var(--lines) 0.0167em,
+		#000 0.05em
+	);
+	*/
+
+	background: repeating-radial-gradient(
+		circle at var(--circle-x) var(--circle-y),
+		#000,
+		var(--lines) calc(0.0167em * var(--ring-scale)),
+		#000 calc(0.05em * var(--ring-scale))
+	);
+
+	filter: contrast(2000%);
+}
+
+.glow-circle{
+	
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	background: radial-gradient(
+		circle at var(--circle-x) var(--circle-y), 
+		rgba(255,255,255,1.0) 0%,
+		rgba(255,255,255,1.0) 10%,
+		rgba(255,255,255,0.0) 15%
+		);
+	opacity: 0.8;
+}
+
+.numbers {
+	font-size: 0.75em;
+	color: #fff;
+	filter: blur(0.0125em);
+	/* filter: blur(calc((1.0 - var(--blur-amount, 0)) + 0.0125em) ); */
+	/* filter: blur(1.0em); */
+	/* filter: blur( calc(var(--blur-amount, 0)*1.0em) ); */
+	/* filter: blur( var(--blur-amount) * 1.0em); */
+
+	/* transform: rotate(0deg); */
+	opacity: var(--number-opacity);
+
+	/* position: absolute; */
+	/* top: 0; */
+	/* bottom: 0; */
+	/* left: 0; */
+	/* right: 100px; */
+
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+}
+
+
+
+/*
+.hour {
+	transform: translatex(0em);
+}
+
+.min {
+	transform: translatex(0em);
+}
+
+.sec {
+	transform: translatex(0.2em);
+}
+*/
+
+.clock-inner{
+
+	/*
+	box-shadow: 
+		inset 0 0 100px rgba(255,255,255,1.0);
+	*/
+
+	/* no offset so all four edges fade evenly; large blur makes the fade soft */
+	box-shadow:
+		inset 0 0 25px 0px rgba(0,0,0,1.0);
+}
+
+/* fills the gaps between the lines (black after the overlay) with --gap */
+.clock::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: var(--gap);
+	mix-blend-mode: lighten;
+	pointer-events: none;
+}
+
+
+.clock-overlay {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	mix-blend-mode: multiply;
+	pointer-events: none;
+	/* Hawaiian Sunset rainbow gradient (compiled from SCSS @mixin rainbow) */
+	
+	background: repeating-radial-gradient(
+		circle at 50% 100%, 
+		#4b1460 0em, #4b1460 0.05em,
+		#732a83 0.05em, #732a83 0.1em,
+		#a33ea2 0.2em, #a33ea2 0.25em,
+		#d02c90 0.45em, #d02c90 0.5em,
+		#fd437d 0.8em, #fd437d 0.85em,
+		#fd7c5f 1.25em, #fd7c5f 1.3em,
+		#fdad7b 1.8em, #fdad7b 1.85em,
+		#ffd07a 2.45em, #ffd07a 2.5em,
+		#faefb6 3.2em, #faefb6 3.25em,
+		#fff5dc 4.05em, #fff5dc 4.1em
+	);
+	
+
+	/* omarchy gradient */
+	/*
+	background: repeating-radial-gradient(
+		circle at 0% 100%,
+		#1a1b26 0vh, 
+		#1a1b26 1.52vh,
+		#292f2e 1.52vh,
+		#292f2e 3.05vh,
+		#374335 6.10vh, 
+		#374335 7.62vh,
+		#46573d 13.72vh, 
+		#46573d 15.24vh,
+		#556b44 24.39vh, 
+		#556b44 25.91vh,
+		#637e4c 38.11vh, 
+		#637e4c 39.63vh,
+		#729253 54.88vh, 
+		#729253 56.40vh,
+		#81a65b 74.70vh, 
+		#81a65b 76.22vh,
+		#8fba62 97.56vh, 
+		#8fba62 99.09vh,
+		#9ece6a 123.48vh, 
+		#9ece6a 125vh
+	);
+	*/
+
+	/*
+	background: repeating-radial-gradient(
+		circle at 0% 100%,
+		#374335 0vh, 
+		#9ece6a 50vh,
+		#374335 100vh
+	);
+	*/
+
+}
+
+
+
+.mouse-follower-container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+
+	font-size: 0.75em;
+	color: #fff;
+	filter: blur(0.0125em);
+	/* filter: blur(calc((1.0 - var(--blur-amount, 0)) + 0.0125em) ); */
+	/* filter: blur(1.0em); */
+	/* filter: blur( calc(var(--blur-amount, 0)*1.0em) ); */
+	/* filter: blur( var(--blur-amount) * 1.0em); */
+
+	/* transform: rotate(0deg); */
+	/* opacity: var(--number-opacity); */
+
+}
+
+.mouse-follower{
+	background: rgba(255, 255, 255, 0.8);
+	width:  150px;
+	height: 150px;
+	border-radius: 50%;
+
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	box-shadow: 
+		0 0  10px rgba(255, 255, 255,1.0),
+		0 0 100px rgba(255, 255, 255,1.0),
+		0 0 200px rgba(255, 255, 255,1.0)
+		;
+	opacity: var(--number-opacity);
+}
